@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Finger Exercise Web | Musical Trainer</title>
   <style>
     * {
@@ -10,6 +10,8 @@
       padding: 0;
       box-sizing: border-box;
       user-select: none; /* avoid accidental selection on taps */
+      touch-action: manipulation; /* prevent double-tap zoom */
+      -webkit-touch-callout: none; /* disable long-press callout on iOS */
     }
 
     body {
@@ -688,10 +690,23 @@
     document.addEventListener('touchstart', enableAudio);
   }
 
+  // Prevent double-tap zoom on touch devices
+  function preventDoubleClickZoom() {
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (event) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+  }
+
   // Additional: reset mode on page ready, ensure footer and styles
   function init() {
     bindEvents();
     preloadAudioOnFirstInteraction();
+    preventDoubleClickZoom();
     updateSequenceUI();
     setExerciseMode(false);
     progressTextSpan.innerText = `Step 0 / 0`;
