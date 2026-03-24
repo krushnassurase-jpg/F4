@@ -113,6 +113,26 @@
       100% { transform: scale(1); }
     }
 
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 0, 0.7); }
+      50% { box-shadow: 0 0 0 10px rgba(255, 255, 0, 0); }
+    }
+
+    /* Glow animations for feedback */
+    @keyframes greenGlow {
+      0% { background: linear-gradient(145deg, #10151c 0%, #1a232f 100%); }
+      50% { background: linear-gradient(145deg, #0d2818 0%, #1a3d2e 100%); 
+            box-shadow: inset 0 0 60px rgba(111, 207, 151, 0.4), 0 0 40px rgba(111, 207, 151, 0.2); }
+      100% { background: linear-gradient(145deg, #10151c 0%, #1a232f 100%); }
+    }
+
+    @keyframes redGlow {
+      0% { background: linear-gradient(145deg, #10151c 0%, #1a232f 100%); }
+      50% { background: linear-gradient(145deg, #2d1015 0%, #3d1820 100%); 
+            box-shadow: inset 0 0 60px rgba(255, 107, 107, 0.4), 0 0 40px rgba(255, 107, 107, 0.2); }
+      100% { background: linear-gradient(145deg, #10151c 0%, #1a232f 100%); }
+    }
+
     /* SEQUENCE BUILDER SECTION */
     .builder-card {
       background: rgba(20, 30, 45, 0.65);
@@ -169,6 +189,11 @@
       transition: 0.1s;
       font-size: 0.9rem;
       backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      white-space: nowrap;
     }
     .sec-btn:active { transform: scale(0.96); background: #1e2f3f; }
     .start-btn {
@@ -217,30 +242,86 @@
       font-weight: 400;
     }
 
-    /* popup messages */
+    /* popup messages - Enhanced styling */
     .toast-message {
       position: fixed;
-      bottom: 30px;
+      bottom: 120px;
       left: 50%;
-      transform: translateX(-50%) scale(0.9);
-      background: #1e2a3e;
-      backdrop-filter: blur(20px);
-      padding: 0.9rem 2rem;
-      border-radius: 60px;
-      color: #ffefcf;
-      font-weight: 600;
+      transform: translateX(-50%) translateY(20px);
+      background: linear-gradient(135deg, rgba(30, 42, 62, 0.98) 0%, rgba(20, 30, 45, 0.98) 100%);
+      backdrop-filter: blur(25px);
+      padding: 1.2rem 2.2rem;
+      border-radius: 1.2rem;
+      color: #e8f0ff;
+      font-weight: 500;
       z-index: 1000;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-      border-left: 6px solid #f5a623;
-      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       opacity: 0;
       pointer-events: none;
       font-size: 1rem;
+      max-width: 500px;
+      line-height: 1.6;
+      letter-spacing: 0.3px;
     }
+
+    /* Message type styles */
+    .toast-message.error {
+      background: linear-gradient(135deg, rgba(61, 16, 22, 0.98) 0%, rgba(45, 16, 21, 0.98) 100%);
+      border-left: 5px solid #ff6b6b;
+      border-color: rgba(255, 107, 107, 0.3);
+      color: #ffe1e1;
+      box-shadow: 0 20px 50px rgba(255, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .toast-message.success {
+      background: linear-gradient(135deg, rgba(13, 40, 24, 0.98) 0%, rgba(26, 61, 46, 0.98) 100%);
+      border-left: 5px solid #51cf66;
+      border-color: rgba(81, 207, 102, 0.3);
+      color: #e8f5e9;
+      box-shadow: 0 20px 50px rgba(81, 207, 102, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .toast-message.info {
+      background: linear-gradient(135deg, rgba(13, 30, 50, 0.98) 0%, rgba(20, 40, 65, 0.98) 100%);
+      border-left: 5px solid #74b3ff;
+      border-color: rgba(116, 179, 255, 0.3);
+      color: #cce5ff;
+      box-shadow: 0 20px 50px rgba(116, 179, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .toast-message.warning {
+      background: linear-gradient(135deg, rgba(60, 45, 15, 0.98) 0%, rgba(50, 35, 10, 0.98) 100%);
+      border-left: 5px solid #ffd666;
+      border-color: rgba(255, 214, 102, 0.3);
+      color: #fff9e6;
+      box-shadow: 0 20px 50px rgba(255, 214, 102, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    }
+
+    /* Visible state */
+    .toast-message.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Hide animation */
+    .toast-message.hide {
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px);
+      pointer-events: none;
+    }
+
+    /* Confetti-like congrats effect */
     .congrats-toast {
-      border-left: 6px solid #6fcf97;
-      background: #2a4b2e;
-      color: #e9f5e9;
+      animation: celebrationPulse 0.6s ease-out;
+    }
+
+    @keyframes celebrationPulse {
+      0% { transform: translateX(-50%) scale(0.8) translateY(0); opacity: 1; }
+      50% { transform: translateX(-50%) scale(1.02) translateY(-5px); }
+      100% { transform: translateX(-50%) scale(1) translateY(0); opacity: 1; }
     }
 
     /* responsive */
@@ -266,6 +347,39 @@
       transform: none;
       cursor: not-allowed;
       filter: grayscale(0.1);
+    }
+
+    /* Mute button styles */
+    .mute-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #2c3e50;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      z-index: 999;
+    }
+    .mute-btn:hover {
+      background: #3d5266;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      transform: scale(1.05);
+    }
+    .mute-btn:active {
+      transform: scale(0.95);
+    }
+    .mute-btn.muted {
+      background: #5a3a2a;
+      border-color: #ff8a5c;
     }
   </style>
 </head>
@@ -300,6 +414,7 @@
       <div class="builder-actions">
         <button class="sec-btn" id="clearSeqBtn">🗑️ Clear all</button>
         <button class="sec-btn" id="removeLastBtn">↩️ Remove last</button>
+        <button class="sec-btn" id="editSeqBtn" style="display: none; background: #5a7d9f;">✏️ Edit Sequence</button>
         <button class="sec-btn start-btn" id="startExerciseBtn">🎯 START EXERCISE</button>
         <button class="sec-btn cancel-exercise" id="cancelExerciseBtn" style="display: none;">❌ Cancel session</button>
       </div>
@@ -315,16 +430,31 @@
       <div style="margin-top: 1rem; padding: 0.8rem 1.2rem; background: #0f1722; border-radius: 2rem; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.1);">
         <strong>⌨️ Keyboard Bindings:</strong> <span id="keyBindingInfo" style="color: #a0c4ff; margin-left: 0.5rem;"></span>
       </div>
+
+      <!-- Keyboard Configuration Panel -->
+      <div style="margin-top: 1rem; padding: 1rem 1.2rem; background: rgba(200, 100, 50, 0.1); border-radius: 2rem; border: 1px solid rgba(200, 100, 50, 0.3);">
+        <strong style="color: #ffb366;">🎹 Configure Custom Keys</strong>
+        <p style="font-size: 0.85rem; color: #b0c4ff; margin: 0.5rem 0 1rem; font-style: italic;">Click each button and press any key to assign</p>
+        <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+          <button class="sec-btn" id="configBtn1" style="background: #ff6b4a; flex: 1; min-width: 120px;">Set Key for 1</button>
+          <button class="sec-btn" id="configBtn2" style="background: #2e7d32; flex: 1; min-width: 120px;">Set Key for 2</button>
+          <button class="sec-btn" id="configBtn3" style="background: #1e4bd2; flex: 1; min-width: 120px;">Set Key for 3</button>
+          <button class="sec-btn" id="resetKeysBtn" style="background: #444; flex: 1; min-width: 120px;">🔄 Reset to Default</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="footer">
-  Krushna Sandip Surase
+  Idea And Developed by <b>Krushna Sandip Surase</b>
 </div>
 
 <!-- floating popup container -->
 <div id="toastMsg" class="toast-message">⚠️ Message</div>
+
+<!-- Mute button -->
+<button class="mute-btn" id="muteBtn" title="Toggle sound on/off">🔊</button>
 
 <script>
   // ------------------- DOM Elements -------------------
@@ -345,15 +475,14 @@
   // Map keyboard keys to button values. Modify these as needed!
   // Examples: 'KeyZ', 'KeyX', 'KeyC' for QWERTY, or '1', '2', '3' for numbers
   // More key names: 'ArrowLeft', 'ArrowRight', 'Space', 'KeyA', etc.
-  const keyMapping = {
+  const DEFAULT_KEY_MAPPING = {
     'Digit1': 1,      // Press "1" key → Button 1
     'Digit2': 2,      // Press "2" key → Button 2
     'Digit3': 3,      // Press "3" key → Button 3
-    // Add or replace with your preferred keys:
-    // 'KeyZ': 1,       // Press "Z" key → Button 1
-    // 'KeyX': 2,       // Press "X" key → Button 2
-    // 'KeyC': 3,       // Press "C" key → Button 3
   };
+
+  let keyMapping = { ...DEFAULT_KEY_MAPPING };  // Current user mapping
+  let configureMode = null;  // null or buttonNumber (1,2,3) when configuring
 
   // ------------------- State -------------------
   let targetSequence = [];        // array of numbers (1,2,3)
@@ -361,6 +490,7 @@
 
   // Exercise state
   let exerciseActive = false;
+  let sequenceLocked = false;      // TRUE = sequence is finalized, cannot add steps unless unlocked
   let currentStepIndex = 0;       // next expected index (0-based)
   let exerciseTimerInterval = null;
   let exerciseStartTime = 0;       // performance timestamp
@@ -369,30 +499,40 @@
   // Audio feedback (web audio)
   let audioCtx = null;
   let audioInitialized = false;
+  let isMuted = false;  // Mute state
 
-  // ------------------- Helper: show popup messages (nice toast) -------------
-  function showMessage(text, isError = true, isCongrats = false) {
+  // ------------------- Helper: show popup messages (enhanced) -------------------
+  function showMessage(text, isError = false, isCongrats = false, isWarning = false) {
     const toast = document.getElementById('toastMsg');
     toast.textContent = text;
-    toast.classList.remove('congrats-toast');
+    
+    // Remove all classes first
+    toast.classList.remove('error', 'success', 'info', 'warning', 'congrats-toast', 'hide');
+    
+    // Add appropriate class based on message type
     if (isCongrats) {
-      toast.classList.add('congrats-toast');
+      toast.classList.add('success', 'congrats-toast');
+    } else if (isError) {
+      toast.classList.add('error');
+    } else if (isWarning) {
+      toast.classList.add('warning');
     } else {
-      // default style orange left border for errors/warnings
-      toast.style.borderLeftColor = isError ? '#f5a623' : '#4caf50';
-      if (!isError && !isCongrats) toast.style.borderLeftColor = '#4caf50';
+      toast.classList.add('info');
     }
-    toast.style.opacity = '1';
-    toast.style.transform = 'translateX(-50%) scale(1)';
+    
+    // Show with animation
+    toast.classList.add('show');
+    
+    // Hide after delay - synchronized with background glow (1500ms)
     setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transform = 'translateX(-50%) scale(0.9)';
-    }, 2400);
+      toast.classList.remove('show');
+      toast.classList.add('hide');
+    }, 1500);
   }
 
   // warning helper
-  function showWarning(msg) { showMessage(msg, true, false); }
-  function showSuccess(msg, isCongrats = true) { showMessage(msg, false, isCongrats); }
+  function showWarning(msg) { showMessage(msg, true, false, false); }
+  function showSuccess(msg, isCongrats = true) { showMessage(msg, false, isCongrats, false); }
 
   // ------------------- Sound feedback (musical tones) -------------------
   function initAudio() {
@@ -401,6 +541,7 @@
   }
 
   function playTone(frequency, duration = 0.18, volume = 0.25) {
+    if (isMuted) return;  // Don't play if muted
     try {
       if (!audioCtx) {
         initAudio();
@@ -453,6 +594,21 @@
     animateButton(domBtn);
   }
 
+  // apply glow effect to background (success = green, error = red)
+  function applyBackgroundGlow(isSuccess) {
+    const body = document.body;
+    const glowClass = isSuccess ? 'glow-success' : 'glow-error';
+    const glowKeyframe = isSuccess ? 'greenGlow' : 'redGlow';
+    
+    // Temporarily add animation
+    body.style.animation = `${glowKeyframe} 1.5s ease-in-out 1`;
+    
+    // Remove animation after it completes so it can be triggered again
+    setTimeout(() => {
+      body.style.animation = 'none';
+    }, 1500);
+  }
+
   // ------------------- UI update for sequence display & badge -------------------
   function updateSequenceUI() {
     const len = targetSequence.length;
@@ -468,6 +624,7 @@
   // add to sequence (builder mode)
   function addToSequence(value) {
     if (exerciseActive) return; // safety: should not be callable when active
+    if (sequenceLocked) return; // cannot add if sequence is locked
     if (targetSequence.length >= MAX_LEN) {
       showWarning(`Maximum sequence length is ${MAX_LEN}! Remove some steps.`);
       return false;
@@ -480,16 +637,25 @@
   // clear full sequence
   function clearSequence() {
     if (exerciseActive) return;
-    targetSequence = [];
-    updateSequenceUI();
-    // also reset any leftover progress display if needed
-    if (!exerciseActive) {
-      progressTextSpan.innerText = `Step 0 / 0`;
+    if (!sequenceLocked) {
+      targetSequence = [];
+      updateSequenceUI();
+      updateEditButtonState();
+      // also reset any leftover progress display if needed
+      if (!exerciseActive) {
+        progressTextSpan.innerText = `Step 0 / 0`;
+      }
+    } else {
+      showWarning("Sequence is locked! Click 'Edit Sequence' to unlock first.");
     }
   }
 
   function removeLastStep() {
     if (exerciseActive) return;
+    if (sequenceLocked) {
+      showWarning("Sequence is locked! Click 'Edit Sequence' to unlock first.");
+      return;
+    }
     if (targetSequence.length > 0) {
       targetSequence.pop();
       updateSequenceUI();
@@ -535,26 +701,24 @@
   function setExerciseMode(active) {
     exerciseActive = active;
     if (active) {
-      // entering exercise
+      // entering exercise - lock the sequence
+      sequenceLocked = true;
       modeLabelSpan.innerText = "Exercise 🔥";
       modeLabelSpan.style.color = "#f9b043";
       startBtn.disabled = true;
       clearSeqBtn.disabled = true;
       removeLastBtn.disabled = true;
       cancelExerciseBtn.style.display = "inline-flex";
-      // hide start button style? we keep but disabled, show cancel
     } else {
-      // back to building
+      // back to building - keep sequence locked, show edit button
       modeLabelSpan.innerText = "Building";
       modeLabelSpan.style.color = "#f7b05e";
       startBtn.disabled = false;
-      clearSeqBtn.disabled = false;
-      removeLastBtn.disabled = false;
       cancelExerciseBtn.style.display = "none";
+      updateEditButtonState();
       // reset progress to show total steps, but not active exercise
       const totalLen = targetSequence.length;
       progressTextSpan.innerText = `Step 0 / ${totalLen}`;
-      // also if any leftover timer stopped already
     }
     updateSequenceUI(); // ensure no visual glitch
   }
@@ -571,6 +735,54 @@
     showMessage("Exercise cancelled. You can edit sequence.", false, false);
   }
 
+  // update edit button visibility based on sequence lock state
+  function updateEditButtonState() {
+    const editBtn = document.getElementById('editSeqBtn');
+    const clearBtn = document.getElementById('clearSeqBtn');
+    const removeBtn = document.getElementById('removeLastBtn');
+    
+    if (sequenceLocked && targetSequence.length > 0) {
+      editBtn.style.display = "inline-flex";
+      clearBtn.disabled = true;
+      removeBtn.disabled = true;
+    } else {
+      editBtn.style.display = "none";
+      clearBtn.disabled = false;
+      removeBtn.disabled = false;
+    }
+  }
+
+  // toggle sequence lock/unlock for editing
+  function toggleSequenceLock() {
+    if (exerciseActive) {
+      showWarning("Cannot edit sequence during exercise!");
+      return;
+    }
+    sequenceLocked = !sequenceLocked;
+    updateEditButtonState();
+    
+    if (sequenceLocked) {
+      showSuccess("Sequence locked. Click 'Edit Sequence' to modify it.", false);
+    } else {
+      showMessage("Sequence unlocked. You can now edit or clear it.", false, false);
+    }
+  }
+
+  // toggle mute sound
+  function toggleMute() {
+    isMuted = !isMuted;
+    const muteBtn = document.getElementById('muteBtn');
+    if (isMuted) {
+      muteBtn.textContent = '🔇';
+      muteBtn.classList.add('muted');
+      showMessage('🔇 Sound muted', false, false);
+    } else {
+      muteBtn.textContent = '🔊';
+      muteBtn.classList.remove('muted');
+      showMessage('🔊 Sound unmuted', false, false);
+    }
+  }
+
   // called when wrong press
   function handleWrongPress(pressedVal) {
     if (!exerciseActive) return;
@@ -581,6 +793,7 @@
     currentStepIndex = 0;
     setExerciseMode(false);
     updateProgressDisplay();
+    applyBackgroundGlow(false); // RED glow for error
     showWarning(`❌ Wrong sequence! You pressed ${pressedVal} but expected ${targetSequence[currentStepIndex]}. Try again.`);
   }
 
@@ -591,12 +804,13 @@
 
     if (currentStepIndex === targetSequence.length) {
       // COMPLETE!
-      stopTimerAndReset();
       const completionTime = currentTimerSeconds;
+      stopTimerAndReset();
       exerciseActive = false;
       setExerciseMode(false);
       currentStepIndex = 0;
       updateProgressDisplay();
+      applyBackgroundGlow(true); // GREEN glow for success
       showSuccess(`🎉 Great job! You completed the exercise! 🎉  (${completionTime.toFixed(2)} seconds)`, true);
     }
   }
@@ -658,9 +872,31 @@
     clearSeqBtn.addEventListener('click', clearSequence);
     removeLastBtn.addEventListener('click', removeLastStep);
     cancelExerciseBtn.addEventListener('click', cancelExercise);
+    document.getElementById('editSeqBtn').addEventListener('click', toggleSequenceLock);
+    document.getElementById('muteBtn').addEventListener('click', toggleMute);
+
+    // ========== Keyboard Configuration Buttons ==========
+    const configBtn1 = document.getElementById('configBtn1');
+    const configBtn2 = document.getElementById('configBtn2');
+    const configBtn3 = document.getElementById('configBtn3');
+    const resetKeysBtn = document.getElementById('resetKeysBtn');
+
+    configBtn1.addEventListener('click', () => startKeyConfiguration(1));
+    configBtn2.addEventListener('click', () => startKeyConfiguration(2));
+    configBtn3.addEventListener('click', () => startKeyConfiguration(3));
+    resetKeysBtn.addEventListener('click', resetKeyMapping);
 
     // ========== Keyboard Support ==========
     document.addEventListener('keydown', (event) => {
+      // If in configuration mode, capture the key
+      if (configureMode !== null) {
+        event.preventDefault();
+        assignKeyToButton(configureMode, event.code);
+        configureMode = null;
+        return;
+      }
+
+      // Normal keyboard operation
       const mappedButtonValue = keyMapping[event.code];
       if (mappedButtonValue !== undefined) {
         event.preventDefault(); // prevent default key behavior
@@ -672,6 +908,71 @@
         }
       }
     });
+  }
+
+  // Start capturing a key for a specific button
+  function startKeyConfiguration(buttonNumber) {
+    if (exerciseActive) {
+      showWarning("Cannot configure keys during exercise!");
+      return;
+    }
+    configureMode = buttonNumber;
+    const configBtns = ['configBtn1', 'configBtn2', 'configBtn3'];
+    const selectedBtn = document.getElementById(configBtns[buttonNumber - 1]);
+    selectedBtn.style.border = '2px solid #ffff00';
+    selectedBtn.style.animation = 'pulse 0.6s infinite';
+    showMessage(`🎹 Press any key for Button ${buttonNumber}...`, false, false);
+  }
+
+  // Assign a key code to a button
+  function assignKeyToButton(buttonNumber, keyCode) {
+    // Remove old mappings for this button
+    for (let code in keyMapping) {
+      if (keyMapping[code] === buttonNumber) {
+        delete keyMapping[code];
+      }
+    }
+    // Add new mapping
+    keyMapping[keyCode] = buttonNumber;
+    
+    // Save to localStorage
+    localStorage.setItem('customKeyMapping', JSON.stringify(keyMapping));
+    
+    // Reset button styles
+    const configBtns = ['configBtn1', 'configBtn2', 'configBtn3'];
+    for (let i = 0; i < 3; i++) {
+      const btn = document.getElementById(configBtns[i]);
+      btn.style.border = '';
+      btn.style.animation = '';
+    }
+
+    displayKeyBindings();
+    showSuccess(`✅ Button ${buttonNumber} now uses key: ${keyCode}`, false);
+  }
+
+  // Reset to default key mapping
+  function resetKeyMapping() {
+    if (exerciseActive) {
+      showWarning("Cannot configure keys during exercise!");
+      return;
+    }
+    keyMapping = { ...DEFAULT_KEY_MAPPING };
+    localStorage.removeItem('customKeyMapping');
+    displayKeyBindings();
+    showSuccess("✅ Keys reset to default", false);
+  }
+
+  // Load saved key mapping from localStorage
+  function loadKeyMapping() {
+    const saved = localStorage.getItem('customKeyMapping');
+    if (saved) {
+      try {
+        keyMapping = JSON.parse(saved);
+      } catch(e) {
+        console.log("Failed to load custom key mapping, using default");
+        keyMapping = { ...DEFAULT_KEY_MAPPING };
+      }
+    }
   }
 
   // preload audio on first user tap (any button) to comply with autoplay
@@ -692,10 +993,13 @@
 
   // Additional: reset mode on page ready, ensure footer and styles
   function init() {
+    loadKeyMapping();
     bindEvents();
     preloadAudioOnFirstInteraction();
     updateSequenceUI();
     setExerciseMode(false);
+    sequenceLocked = false;
+    updateEditButtonState();
     progressTextSpan.innerText = `Step 0 / 0`;
     timerTextSpan.innerText = `0.00 s`;
     displayKeyBindings();
@@ -705,9 +1009,24 @@
   function displayKeyBindings() {
     const bindingInfo = document.getElementById('keyBindingInfo');
     const mappings = [];
+    
+    // Create reverse mapping: button -> key codes
+    const buttonToKeys = { 1: [], 2: [], 3: [] };
     for (const [keyCode, buttonValue] of Object.entries(keyMapping)) {
-      mappings.push(`<span style="background: rgba(160, 196, 255, 0.15); padding: 0.2rem 0.6rem; border-radius: 0.5rem; margin-right: 0.5rem;">${keyCode} → Button ${buttonValue}</span>`);
+      buttonToKeys[buttonValue].push(keyCode);
     }
+
+    // Format for each button
+    for (let button = 1; button <= 3; button++) {
+      const keys = buttonToKeys[button];
+      if (keys.length > 0) {
+        const keyDisplay = keys.join(', ');
+        mappings.push(`<span style="background: rgba(160, 196, 255, 0.15); padding: 0.2rem 0.6rem; border-radius: 0.5rem; margin-right: 0.5rem;">Button ${button}: ${keyDisplay}</span>`);
+      } else {
+        mappings.push(`<span style="background: rgba(160, 100, 100, 0.15); padding: 0.2rem 0.6rem; border-radius: 0.5rem; margin-right: 0.5rem; color: #ff8a5c;">Button ${button}: (not set)</span>`);
+      }
+    }
+
     if (mappings.length === 0) {
       bindingInfo.innerHTML = '<span style="color: #ff8a5c;">No keyboard bindings configured</span>';
     } else {
