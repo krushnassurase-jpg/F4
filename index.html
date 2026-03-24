@@ -690,23 +690,10 @@
     document.addEventListener('touchstart', enableAudio);
   }
 
-  // Prevent double-tap zoom on touch devices
-  function preventDoubleClickZoom() {
-    let lastTouchEnd = 0;
-    document.addEventListener('touchend', (event) => {
-      const now = Date.now();
-      if (now - lastTouchEnd <= 300) {
-        event.preventDefault();
-      }
-      lastTouchEnd = now;
-    }, false);
-  }
-
   // Additional: reset mode on page ready, ensure footer and styles
   function init() {
     bindEvents();
     preloadAudioOnFirstInteraction();
-    preventDoubleClickZoom();
     updateSequenceUI();
     setExerciseMode(false);
     progressTextSpan.innerText = `Step 0 / 0`;
